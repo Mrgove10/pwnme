@@ -1,16 +1,22 @@
 
-<form (ngSubmit)="onSubmit(f)" #f="ngForm">
+<form method="POST">
   <div>
     <label for="pseudo">Pseudo :</label>
-    <input type="text" name="pseudo" id="pseudo" ngModel />
+    <input #pseudo type="text" name="pseudo" id="pseudo" ngModel />
   </div>
   <div>
     <label for="commentaire">Commentaire :</label>
-    <textarea type="text" name="commentaire" id="commentaire" ngModel ></textarea>
+    <textarea #commentaire type="text" name="commentaire" id="commentaire" ngModel ></textarea>
   </div>
   <div>
     <label for="fichier">Fichier :</label>
-    <input type="file" name="fichier" id="fichier" ngModel />
+    <input #fichier type="file" name="fichier" id="fichier" ngModel />
   </div>
-  <button class="btn btn-primary" type="submit">Submit</button>
+  <button class="btn btn-primary" type="submit" (click)="onSubmit(pseudo.value, commentaire.value, fichier.value)">Submit</button>
 </form>
+
+<div *ngFor="let item of files">
+  <span>Pseudo : {{ item.Pseudo }}</span>
+  <span>Text : {{ item.Text }}</span>
+  <span>File : {{ item.Filename }}</span>
+</div>

@@ -8,14 +8,27 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private http: HttpClient) { }
+  public files : any = [];
+  public url : string = "http://localhost:3000";
 
-  onSubmit(form: NgForm) {
-    var pseudo = form.value.pseudo;
-    var commentaire = form.value.commentaire;
-    var fichier = form.value.fichier;
+  constructor(private http: HttpClient) {
+      
+   }
 
+  onSubmit(pseudo, commentaire, fichier) {
+    console.log(pseudo);
+    console.log(commentaire);
+    console.log(fichier);
 
+    let data = {
+      "Pseudo": pseudo,
+      "Text": commentaire,
+      "Filename": fichier
+    }
+
+    this.http.post(this.url + "/files", JSON.stringify(data)).subscribe(Response => {
+      console.log(Response);
+    });
     // envoyer en bdd
     //  localhost:3000/files
     // localhost:3000/static
@@ -26,13 +39,9 @@ export class AppComponent {
   }
 
   getFiles(){
-    this.http.get<any>("localhost:3000/files").subscribe(Response => {
-      // this.users = Response; //assigns the response
-      // this.users = this.shuffle(this.users);
-      // this.users.forEach(u => {
-      //   u.distance = 0;
-      //   u.profilepicture = ApiAdress + "/images/user/low/" + u.idsmall + ".png";
-      // });
+    this.http.get<any>(this.url+"/files").subscribe(Response => {
+      this.files = Response;
+      console.log(this.files)
     });
   }
 
