@@ -4,11 +4,11 @@ const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 const xss = require("xss");
-
+const fs = require("fs");
 const app = express();
 
 app.use('/static', express.static('public'))
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb', extended: true}));
 app.use(cors())
 app.use(fileUpload({
     tempFileDir: '/public/'
@@ -33,12 +33,16 @@ app.get('/files', function (req, res) {
 
 app.post('/files', function (req, res) {
     console.log('post');
-    console.log(req.body);
+  //  console.log(req.body);
     var id = uuidv4();
     var text = xss(req.body.Text);
     var filename = xss(req.body.Filename);
     var pseudo = xss(req.body.Pseudo);
     var adddate = new Date().getTime();
+
+    var file = xss(req.body.File);
+    base64(file,filename)
+
     db.run(
         "INSERT INTO Files (ID, Pseudo, Filename, Text, AddDate) VALUES (?,?,?,?,?)",
         [id, text, filename, pseudo, adddate]
@@ -57,4 +61,13 @@ function uuidv4() {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
+}
+
+function base64(base64String, filename) {
+    let base64Image = base64String.split(';base64,').pop();
+    var finalFileLocation = "public/"+filename
+    fs.writeFileSync(finalFileLocation, base64Image, { encoding: 'base64' }, function (err) {
+        console.log('File created at ' + finalFileLocation);
+    });
+    return finalFileLocation;
 }
