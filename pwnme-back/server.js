@@ -1,5 +1,6 @@
 const express = require('express');
 const sqlite3 = require('sqlite3');
+const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 
@@ -11,7 +12,9 @@ let db = new sqlite3.Database('files.sqlite');
 app.use('/static', express.static('public'))
 app.use(bodyParser.json());
 app.use(cors())
-
+app.use(fileUpload({
+    tempFileDir : '/public/'
+}));
 app.get('/files', function (req, res) {
     console.log('get')
     const sql = "SELECT * FROM Files";
@@ -25,14 +28,15 @@ app.get('/files', function (req, res) {
 
 app.post('/files', function (req, res) {
     console.log('post')
-    console.log(req.files.foo); 
+    console.log(req.files); 
     var id = uuidv4();
     var text = req.body.Text;   
     var filename = req.body.Filename;
     var pseudo = req.body.Pseudo;
+    var adddate = new Date().getTime();
     db.run(
-        "INSERT INTO Files (ID, Pseudo, Filename, Text) VALUES (?,?,?,?)",
-        [id, text, filename, pseudo]
+        "INSERT INTO Files (ID, Pseudo, Filename, Text, AddDate) VALUES (?,?,?,?,?)",
+        [id, text, filename, pseudo, adddate]
     );
     res.json(id);
 });
@@ -42,7 +46,6 @@ app.get('/', function (req, res) {
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-
 
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
