@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -14,39 +14,44 @@ export class AppComponent {
       
    }
 
+  sortBy(prop: string) {
+    return this.files.sort((a, b) => a[prop] < b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1);
+  }
+
   onSubmit(pseudo, commentaire, fichier) {
-    console.log(pseudo);
-    console.log(commentaire);
-    console.log(fichier);
+    var arrayFichier = fichier.split("\\");
+    var fileName = arrayFichier[arrayFichier.length-1];
 
     let data = {
       "Pseudo": pseudo,
       "Text": commentaire,
-      "Filename": fichier
-    }
+      "Filename": fileName
+    };
 
-    this.http.post(this.url + "/files", JSON.stringify(data)).subscribe(Response => {
+    var headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+
+    var requestBody = JSON.stringify(data);
+
+    console.log(requestBody);
+
+    this.http.post(this.url + "/files", requestBody, {headers}).subscribe(Response => {
       console.log(Response);
       location.reload();
     });
-    
-    // envoyer en bdd
-    //  localhost:3000/files
-    // localhost:3000/static
   }
 
   ngOnInit(){
     this.getFiles();
   }
 
-  dowload(fileName){
-    console.log(fileName);
-  }
-
   getFiles(){
     this.http.get<any>(this.url+"/files").subscribe(Response => {
       this.files = Response;
-      console.log(this.files)
+      this.files.forEach(element => {
+        element.Filename = this.url+"/static/"+element.Filename;
+      });
     });
   }
 
