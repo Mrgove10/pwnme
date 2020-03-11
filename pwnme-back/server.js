@@ -2,6 +2,7 @@ const express = require('express');
 const sqlite3 = require('sqlite3');
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
+const sanitizer = require('sanitize')();
 const cors = require('cors')
 
 const app = express();
@@ -13,8 +14,18 @@ app.use('/static', express.static('public'))
 app.use(bodyParser.json());
 app.use(cors())
 app.use(fileUpload({
-    tempFileDir : '/public/'
+    tempFileDir: '/public/'
 }));
+
+// Create the collection of api keys
+const apiKeys = new Map();
+apiKeys.set('123456789', {
+  id: 1,
+  name: 'app1',
+  secret: 'secret1'
+});
+
+//routes
 app.get('/files', function (req, res) {
     console.log('get')
     const sql = "SELECT * FROM Files";
@@ -28,17 +39,22 @@ app.get('/files', function (req, res) {
 
 app.post('/files', function (req, res) {
     console.log('post')
-    console.log(req.files); 
-    var id = uuidv4();
-    var text = req.body.Text;   
-    var filename = req.body.Filename;
-    var pseudo = req.body.Pseudo;
-    var adddate = new Date().getTime();
-    db.run(
-        "INSERT INTO Files (ID, Pseudo, Filename, Text, AddDate) VALUES (?,?,?,?,?)",
-        [id, text, filename, pseudo, adddate]
-    );
-    res.json(id);
+    console.log(req.files);
+    try {
+        var id = uuidv4();
+        var text = sanitizer.value(req.body.Text, 'string');
+        var filename = sanitizer.value(req.body.Filename, 'string');
+        var pseudo = sanitizer.value(req.body.Pseudo, 'string');
+        var adddate = new Date().getTime();
+        db.run(
+            "INSERT INTO Files (ID, Pseudo, Filename, Text, AddDate) VALUES (?,?,?,?,?)",
+            [id, text, filename, pseudo, adddate]
+        );
+        res.json(id);
+    }
+    catch (e) {
+        res.json(e);
+    }
 });
 
 app.get('/', function (req, res) {

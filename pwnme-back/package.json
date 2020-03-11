@@ -9,9 +9,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "api-key-auth": "^0.2.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6",
+    "sanitize": "^2.1.0",
     "sqlite3": "^4.1.1"
   }
 }
