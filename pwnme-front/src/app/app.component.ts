@@ -8,7 +8,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class AppComponent {
   public files : any = [];
-  public url : string = "http://stephan-server-xl.duckdns.org:37500";
+  public url : string = "http://localhost:3000";
+  public image : any;
 
   constructor(private http: HttpClient) {
       
@@ -42,7 +43,8 @@ export class AppComponent {
         let data = {
           "Pseudo": pseudo,
           "Text": commentaire,
-          "Filename": fileName
+          "Filename": fileName,
+          "File" : this.image
         };
     
         var headers = new HttpHeaders({
@@ -51,7 +53,7 @@ export class AppComponent {
     
         var requestBody = JSON.stringify(data);
     
-        console.log(requestBody);
+        console.log(data);
     
         this.http.post(this.url + "/files", requestBody, {headers}).subscribe(Response => {
           console.log(Response);
@@ -74,6 +76,19 @@ export class AppComponent {
         element.Filename = this.url+"/static/"+element.Filename;
       });
     });
+  }
+
+  changeListener($event): void {
+    this.readThis($event.target);
+  }
+
+  readThis(inputValue: any): void {
+    var file: File = inputValue.files[0];
+    var myReader: FileReader = new FileReader();
+    myReader.onloadend = (e) => {
+      this.image = myReader.result;
+    }
+    myReader.readAsDataURL(file);
   }
 
 }

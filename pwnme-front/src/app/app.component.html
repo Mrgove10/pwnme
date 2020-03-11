@@ -10,7 +10,7 @@
   </div>
   <div>
     <label for="fichier">Fichier :</label>
-    <input #fichier type="file" name="fichier" id="fichier" accept="image/jpeg, image/jpg, image/gif, image/png, application/pdf"/>
+    <input #fichier type="file" name="fichier" id="fichier" accept="image/jpeg, image/jpg, image/gif, image/png, application/pdf" (change)="changeListener($event)"/>
   </div>
   <button class="btn btn-primary" type="submit" (click)="onSubmit(pseudo.value, commentaire.value, fichier.value)">Submit</button>
 </form>
