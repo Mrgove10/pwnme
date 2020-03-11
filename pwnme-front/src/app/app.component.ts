@@ -19,27 +19,40 @@ export class AppComponent {
   }
 
   onSubmit(pseudo, commentaire, fichier) {
-    var arrayFichier = fichier.split("\\");
-    var fileName = arrayFichier[arrayFichier.length-1];
 
-    let data = {
-      "Pseudo": pseudo,
-      "Text": commentaire,
-      "Filename": fileName
-    };
+    if(pseudo == null || pseudo == ""){
+      // stop
+      alert("votre pseudo n'est pas valide")
+    }
+    else if (commentaire == null || commentaire == "") {
+      // stop
+      alert("votre commentaire n'est pas valide")
+    }else{
+    
+      var arrayFichier = fichier.split("\\");
+      var fileName = arrayFichier[arrayFichier.length-1];
+  
+      let data = {
+        "Pseudo": pseudo,
+        "Text": commentaire,
+        "Filename": fileName
+      };
+  
+      var headers = new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+  
+      var requestBody = JSON.stringify(data);
+  
+      console.log(requestBody);
+  
+      this.http.post(this.url + "/files", requestBody, {headers}).subscribe(Response => {
+        console.log(Response);
+        location.reload();
+      });
+    }
 
-    var headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-
-    var requestBody = JSON.stringify(data);
-
-    console.log(requestBody);
-
-    this.http.post(this.url + "/files", requestBody, {headers}).subscribe(Response => {
-      console.log(Response);
-      location.reload();
-    });
+    
   }
 
   ngOnInit(){

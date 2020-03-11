@@ -2,15 +2,15 @@
 <form method="POST">
   <div>
     <label for="pseudo">Pseudo :</label>
-    <input #pseudo type="text" name="pseudo" id="pseudo" ngModel />
+    <input #pseudo type="text" name="pseudo" id="pseudo" required/>
   </div>
   <div>
     <label for="commentaire">Commentaire :</label>
-    <textarea #commentaire type="text" name="commentaire" id="commentaire" ngModel ></textarea>
+    <textarea #commentaire type="text" name="commentaire" id="commentaire" required></textarea>
   </div>
   <div>
     <label for="fichier">Fichier :</label>
-    <input #fichier type="file" name="fichier" id="fichier" ngModel />
+    <input #fichier type="file" name="fichier" id="fichier" accept="image/jpeg, image/jpg, image/gif, image/png, application/pdf"/>
   </div>
   <button class="btn btn-primary" type="submit" (click)="onSubmit(pseudo.value, commentaire.value, fichier.value)">Submit</button>
 </form>
