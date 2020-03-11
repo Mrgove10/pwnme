@@ -1,12 +1,14 @@
-const express = require('express')
-const sqlite3 = require('sqlite3')
+const express = require('express');
+const sqlite3 = require('sqlite3');
+const bodyParser = require('body-parser');
 
-const app = express()
-const port = 3000
+const app = express();
+const port = 3000;
 
 let db = new sqlite3.Database('files.sqlite');
 
 app.use('/static', express.static('public'))
+app.use(bodyParser.json());
 
 app.get('/files', function (req, res) {
     const sql = "SELECT * FROM Files";
@@ -24,10 +26,9 @@ app.post('/files', function (req, res) {
     var filename = req.body.Filename;
     var pseudo = req.body.Pseudo;
     db.run(
-        "INSERT INTO Files VALUES (?,?)",
+        "INSERT INTO Files (ID, Pseudo, Filename, Text) VALUES (?,?,?,?)",
         [id, text, filename, pseudo]
     );
-    console.log('Got body:', req.body);
 });
 
 app.get('/', function (req, res) {
