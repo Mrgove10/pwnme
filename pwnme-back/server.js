@@ -11,6 +11,7 @@ app.use('/static', express.static('public'))
 app.use(bodyParser.json());
 
 app.get('/files', function (req, res) {
+    console.log('get')
     const sql = "SELECT * FROM Files";
     db.all(sql, [], (err, rows) => {
         if (err) {
@@ -21,6 +22,8 @@ app.get('/files', function (req, res) {
 });
 
 app.post('/files', function (req, res) {
+    console.log('post')
+    console.log(req.files.foo); 
     var id = uuidv4();
     var text = req.body.Text;
     var filename = req.body.Filename;
@@ -29,6 +32,7 @@ app.post('/files', function (req, res) {
         "INSERT INTO Files (ID, Pseudo, Filename, Text) VALUES (?,?,?,?)",
         [id, text, filename, pseudo]
     );
+    res.json(id);
 });
 
 app.get('/', function (req, res) {
