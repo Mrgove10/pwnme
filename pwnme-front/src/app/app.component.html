@@ -14,9 +14,10 @@
   </div>
   <button class="btn btn-primary" type="submit" (click)="onSubmit(pseudo.value, commentaire.value, fichier.value)">Submit</button>
 </form>
-
-<div *ngFor="let item of files">
-  <span>Pseudo : {{ item.Pseudo }}</span>
-  <span>Text : {{ item.Text }}</span>
+<hr>
+<div *ngFor="let item of files | AddDate" style="margin-bottom: 30px;">
+  <span><b>{{ item.Pseudo }}</b></span><br>
+  <span>{{ item.Text }}</span><br>
   <span>File : {{ item.Filename }}</span>
+  <button (click)="download(item.Filename)">Download</button>
 </div>

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -28,7 +27,9 @@ export class AppComponent {
 
     this.http.post(this.url + "/files", JSON.stringify(data)).subscribe(Response => {
       console.log(Response);
+      location.reload();
     });
+    
     // envoyer en bdd
     //  localhost:3000/files
     // localhost:3000/static
@@ -36,6 +37,10 @@ export class AppComponent {
 
   ngOnInit(){
     this.getFiles();
+  }
+
+  dowload(fileName){
+    console.log(fileName);
   }
 
   getFiles(){
