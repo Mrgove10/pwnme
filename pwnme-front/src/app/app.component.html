@@ -15,7 +15,7 @@
   <button class="btn btn-primary" type="submit" (click)="onSubmit(pseudo.value, commentaire.value, fichier.value)">Submit</button>
 </form>
 <hr>
-<div *ngFor="let item of sortBy('AddDate')" style="margin-bottom: 30px;">
+<div *ngFor="let item of sortBy('AddDate') | slice:0:10" style="margin-bottom: 30px;">
   <span><b>{{ item.Pseudo }}</b></span><br>
   <span>{{ item.Text }}</span><br>
   <a href="{{ item.Filename }}">Download</a>
