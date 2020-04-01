@@ -1,22 +1,30 @@
 
-<form method="POST">
-  <div>
-    <label for="pseudo">Pseudo :</label>
-    <input #pseudo type="text" name="pseudo" id="pseudo" required/>
+<div style="margin: auto;width: 50%; margin-top: 10px;">
+  <h1 style="text-align: center;">Pown Me</h1>
+  <form method="POST">
+    <div class="form-group">
+      <label for="pseudo">Pseudo</label>
+      <input #pseudo type="text" class="form-control" name="pseudo" id="pseudo" required/>
+    </div>
+    <div class="form-group">
+      <label for="commentaire">Commentaire</label>
+      <textarea #commentaire type="text" class="form-control" name="commentaire" id="commentaire" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="fichier">Fichier</label>
+      <input #fichier type="file" name="fichier" class="form-control" id="fichier" accept="image/jpeg, image/jpg, image/gif, image/png, application/pdf" (change)="changeListener($event)"/>
+    </div>
+    <button class="btn btn-primary" type="submit" (click)="onSubmit(pseudo.value, commentaire.value, fichier.value)">Submit</button>
+  </form>
+
+  <hr>
+
+  <div class="card" *ngFor="let item of sortBy('AddDate') | slice:0:10" style="margin-bottom: 30px;">
+    <div class="card-body">
+      <span class="card-title"><b>{{ item.Pseudo }}</b></span><br>
+      <span class="card-text">{{ item.Text }}</span><br>
+      <a href="{{ item.Filename }}">Download</a>
+    </div>
   </div>
-  <div>
-    <label for="commentaire">Commentaire :</label>
-    <textarea #commentaire type="text" name="commentaire" id="commentaire" required></textarea>
-  </div>
-  <div>
-    <label for="fichier">Fichier :</label>
-    <input #fichier type="file" name="fichier" id="fichier" accept="image/jpeg, image/jpg, image/gif, image/png, application/pdf" (change)="changeListener($event)"/>
-  </div>
-  <button class="btn btn-primary" type="submit" (click)="onSubmit(pseudo.value, commentaire.value, fichier.value)">Submit</button>
-</form>
-<hr>
-<div *ngFor="let item of sortBy('AddDate') | slice:0:10" style="margin-bottom: 30px;">
-  <span><b>{{ item.Pseudo }}</b></span><br>
-  <span>{{ item.Text }}</span><br>
-  <a href="{{ item.Filename }}">Download</a>
 </div>
+
