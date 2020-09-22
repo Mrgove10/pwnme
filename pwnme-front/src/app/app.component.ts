@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class AppComponent {
   public files : any = [];
-  public url : string = "http://stephan-server-xl.duckdns.org:37500";
+  public url : string = "http://192.168.43.70:3000";
   public image : any;
 
   constructor(private http: HttpClient) {
